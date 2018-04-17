@@ -20,10 +20,7 @@ func send(key string, b []byte) error {
 		Key:    aws.String(key),
 		Body:   bytes.NewReader(b),
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func recv(key string) ([]byte, error) {
