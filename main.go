@@ -12,29 +12,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func testEq(a, b []byte) bool {
-
-	if a == nil && b == nil {
-		return true
-	}
-
-	if a == nil || b == nil {
-		return false
-	}
-
-	if len(a) != len(b) {
-		return false
-	}
-
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-
-	return true
-}
-
 func send(key string, b []byte) error {
 	bucketName := os.Getenv("AWS_BUCKET")
 	svc := s3.New(session.New(), aws.NewConfig())
@@ -43,10 +20,7 @@ func send(key string, b []byte) error {
 		Key:    aws.String(key),
 		Body:   bytes.NewReader(b),
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func recv(key string) ([]byte, error) {
@@ -83,7 +57,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	if testEq(b, b2) {
+	if bytes.Equal(b, b2) {
 		fmt.Println("Worky")
 	}
 
